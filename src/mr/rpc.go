@@ -6,8 +6,12 @@ package mr
 // remember to capitalize all names.
 //
 
-import "os"
-import "strconv"
+import (
+	"os"
+	"strconv"
+	"sync"
+	"time"
+)
 
 //
 // example to show how to declare the arguments
@@ -21,9 +25,22 @@ type ExampleArgs struct {
 type ExampleReply struct {
 	Y int
 }
+type Task struct {
+	TaskType int
+	Filename string
+	NReduce  int
+	TaskId   int
+	Finished bool
+	Start    time.Time
+}
+
+var mutex sync.Mutex
+
+const Waiting = 3
+const Map = 1
+const Reduce = 2
 
 // Add your RPC definitions here.
-
 
 // Cook up a unique-ish UNIX-domain socket name
 // in /var/tmp, for the coordinator.
